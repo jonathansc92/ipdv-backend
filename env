@@ -30,7 +30,7 @@
 # DATABASE
 #--------------------------------------------------------------------
 
-database.default.hostname = localhost
+database.default.hostname = ipdv-db
 database.default.database = ipdv
 database.default.username = root
 database.default.password = root

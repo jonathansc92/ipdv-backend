@@ -10,7 +10,7 @@ RUN apt update \
     && apt install -y zlib1g-dev libpng-dev libjpeg-dev libjpeg62-turbo-dev libfreetype6-dev git zip libzip-dev libicu-dev libonig-dev libpq-dev \
     && docker-php-ext-configure intl \
     && docker-php-ext-install pgsql pdo pdo_pgsql zip intl \
-    && docker-php-ext-enable intl \
+    && docker-php-ext-enable intl pdo_pgsql pgsql \
     && a2enmod rewrite headers proxy ssl proxy_http http2 alias \
     && chmod 755 /usr/local/bin/custom-entrypoint \
     && cd /usr/local/bin/ \
