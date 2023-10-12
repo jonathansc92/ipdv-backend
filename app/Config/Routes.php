@@ -10,7 +10,9 @@ service('auth')->routes($routes);
 
 
 $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
-    $routes->get('/s', 'UserController::get');
+    $routes->group('cost-centers', function ($routes) {
+        $routes->get('/', 'CostCenterController::get');
+    });
 
     $routes->group('users', function ($routes) {
         $routes->get('/', 'UserController::get');
