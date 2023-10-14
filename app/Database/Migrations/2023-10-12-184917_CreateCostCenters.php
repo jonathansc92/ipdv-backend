@@ -18,7 +18,16 @@ class CreateCostCenters extends Migration
             'description' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50
-            ]
+            ],
+            'created_at' => [
+                'type' => 'timestamp',
+                'null' => false,
+            ],
+            'updated_at' => [
+                'type' => 'datetime',
+                'null' => false,
+                'on update' => 'NOW()'
+            ],
         ]);
 
         $this->forge->addPrimaryKey('id');
