@@ -2,52 +2,91 @@
 
 namespace App\Controllers\Api;
 
-use App\Models\CostCenterModel;
+use CodeIgniter\HTTP\Response;
 use CodeIgniter\RESTful\ResourceController;
-use App\Services\CostCenterService;
 
 class CostCenterController extends ResourceController
 {
 
-    protected $model;
+    protected $modelName = 'App\Models\CostCenterModel';
+    protected $format = 'json';
 
-    public function __construct()
+    public function index()
     {
-        $this->model = new CostCenterModel();
-    }
+        $data = format_return(true, SUCCESS, $this->model->paginate());
 
-    public function get()
-    {
-        $costCenterData = $this->model->paginate();
-
-        $return = returnal(true, 'Centro de Custos recuperados com sucesso!', $costCenterData);
-
-        return $this->respond($return);
+        return $this->respond($data, Response::HTTP_OK);
     }
 
     public function show($id = null)
     {
-        //
+        $costCenter = $this->model->find($id);
+
+        if (!$costCenter) {
+            return $this->failNotFound(NOT_FOUND);
+        }
+
+        return $this->respond(format_return(true, SUCCESS, $costCenter));
     }
 
     public function create()
     {
+        $rules = $this->validate(([
+            'description' => 'required'
+        ]));
+
+        if (!$rules) {
+            $response = [
+                'message' => $this->validator->getErrors()
+            ];
+
+            return $this->failValidationErrors($response);
+        }
+
         $data = [
-            'description' => $this->request->getVar('description')
+            'description' => $this->request->getVar('description'),
         ];
 
-        $this->model->insert($data);
+        $costCenter = $this->model->insert($data, false);
 
-        return returnal(true, 'Centro de Custos adicionado com sucesso!', $this->model);
+        if ($costCenter) {
+            return $this->respondCreated(format_return($costCenter, CREATED));
+        }
+
+        return $this->respond(format_return(false, ERROR), Response::HTTP_FORBIDDEN);
     }
 
     public function update($id = null)
     {
-        //
+        $rules = $this->validate(([
+            'description' => 'required'
+        ]));
+
+        if (!$rules) {
+            $response = [
+                'message' => $this->validator->getErrors()
+            ];
+
+            return $this->failValidationErrors($response);
+        }
+
+        $data = [
+            'description' => $this->request->getVar('description'),
+        ];
+
+        $costCenter = $this->model->update($id, $data);
+
+        if ($costCenter) {
+            return $this->respondUpdated(format_return($costCenter, UPDATED));
+        }
+
+        return $this->respond(format_return(false, ERROR), Response::HTTP_FORBIDDEN);
     }
 
     public function delete($id = null)
     {
-        //
+        $this->model->delete($id);
+
+        return $this->respondDeleted(format_return(true, DELETED));
     }
 }
