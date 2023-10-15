@@ -100,6 +100,7 @@ class Autoload extends AutoloadConfig
      */
     public $helpers = [
         'returnal',
-        'messages'
+        'messages',
+        'pagination'
     ];
 }

@@ -1,6 +1,6 @@
 <?php
 
-function format_return($success = true, string $message = '', $data = null)
+function format_return($success = true, string $message = '', $data = null, $pager = null)
 {
     $response = [
         'success' => $success,
@@ -8,10 +8,17 @@ function format_return($success = true, string $message = '', $data = null)
     ];
 
     if ($data) {
-        $responseData = [
-            'data' => $data
-        ];
-
+        if ($pager) {
+            $responseData = [
+                'data' => $data,
+                'pager' => $pager
+            ];
+        } else {
+            $responseData = [
+                'data' => $data,
+            ];
+        }
+     
         $response = array_merge($response, $responseData);
     }
 
