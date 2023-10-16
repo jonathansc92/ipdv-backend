@@ -1,6 +1,6 @@
 <?php
 
-function format_return($success = true, string $message = '', $data = null, $pager = null)
+function format_return($success = true, string $message = '', $data = null, $pagination = null)
 {
     $response = [
         'success' => $success,
@@ -8,10 +8,10 @@ function format_return($success = true, string $message = '', $data = null, $pag
     ];
 
     if ($data) {
-        if ($pager) {
+        if ($pagination) {
             $responseData = [
                 'data' => $data,
-                'pager' => $pager
+                'pagination' => $pagination
             ];
         } else {
             $responseData = [

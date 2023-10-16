@@ -15,8 +15,12 @@ class CostCenterController extends ResourceController
     {
         $perPage = (int) $this->request->getGet('per_page') ?: PER_PAGE;
         $page = (int) $this->request->getGet('page') ?: PAGE;
+        
+        $costCenters = $this->model->paginate($perPage, 'group1', $page);
 
-        $data = format_return(true, SUCCESS, $this->model->paginate($perPage, 'group1', $page));
+        $pagination = getPagination($this->model);
+        
+        $data = format_return(true, SUCCESS, $costCenters, $pagination);
 
         return $this->respond($data, Response::HTTP_OK);
     }

@@ -14,15 +14,18 @@ class DepartmentController extends ResourceController
     public function index()
     {
         $perPage = $this->request->getGet('per_page') ?: PER_PAGE;
+        $page = (int) $this->request->getGet('page') ?: PAGE;
 
-        $departments = $this->model->paginate($perPage);
+        $departments = $this->model->paginate($perPage, 'group1', $page);
 
         if ($this->request->getGet('cost_centers')) {
            $departments = $this->model->where('cost_center_id', $this->request->getGet('cost_centers'))->paginate($perPage);
         }
 
+        $pagination = getPagination($this->model);
+
         if ($departments) {
-            $data = format_return(true, SUCCESS , $departments, $this->model->pager);
+            $data = format_return(true, SUCCESS , $departments, $pagination);
         } else {
             $data = format_return(false, NOT_FOUND , $departments);
         }
