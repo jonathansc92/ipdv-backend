@@ -10,6 +10,29 @@ class DepartmentController extends ResourceController
 
     protected $modelName = 'App\Models\DepartmentModel';
     protected $format = 'json';
+    private function data(): array
+    {
+        return [
+            'description' => $this->request->getVar('description'),
+            'cost_center_id' => $this->request->getVar('cost_center_id'),
+        ];
+    }
+
+    private function rules()
+    {
+        $rules = $this->validate(([
+            'description' => 'required',
+            'cost_center_id' => 'required',
+        ]));
+
+        if (!$rules) {
+            $response = [
+                'message' => $this->validator->getErrors()
+            ];
+
+            return $this->failValidationErrors($response);
+        }
+    }
 
     public function index()
     {
@@ -19,15 +42,15 @@ class DepartmentController extends ResourceController
         $departments = $this->model->paginate($perPage, 'group1', $page);
 
         if ($this->request->getGet('cost_centers')) {
-           $departments = $this->model->where('cost_center_id', $this->request->getGet('cost_centers'))->paginate($perPage);
+            $departments = $this->model->where('cost_center_id', $this->request->getGet('cost_centers'))->paginate($perPage);
         }
 
         $pagination = getPagination($this->model);
 
         if ($departments) {
-            $data = format_return(true, SUCCESS , $departments, $pagination);
+            $data = format_return(true, SUCCESS, $departments, $pagination);
         } else {
-            $data = format_return(false, NOT_FOUND , $departments);
+            $data = format_return(false, NOT_FOUND, $departments);
         }
 
         return $this->respond($data, Response::HTTP_OK);
@@ -46,25 +69,11 @@ class DepartmentController extends ResourceController
 
     public function create()
     {
-        $rules = $this->validate(([
-            'description' => 'required',
-            'cost_center_id' => 'required',
-        ]));
-
-        if (!$rules) {
-            $response = [
-                'message' => $this->validator->getErrors()
-            ];
-
-            return $this->failValidationErrors($response);
+        if ($this->rules()) {
+            return $this->rules();
         }
 
-        $data = [
-            'description' => $this->request->getVar('description'),
-            'cost_center_id' => $this->request->getVar('cost_center_id'),
-        ];
-
-        $department = $this->model->insert($data, false);
+        $department = $this->model->insert($this->data(), false);
 
         if ($department) {
             return $this->respondCreated(format_return($department, CREATED));
@@ -75,25 +84,11 @@ class DepartmentController extends ResourceController
 
     public function update($id = null)
     {
-        $rules = $this->validate(([
-            'description' => 'required',
-            'cost_center_id' => 'required',
-        ]));
-
-        if (!$rules) {
-            $response = [
-                'message' => $this->validator->getErrors()
-            ];
-
-            return $this->failValidationErrors($response);
+        if ($this->rules()) {
+            return $this->rules();
         }
 
-        $data = [
-            'description' => $this->request->getVar('description'),
-            'cost_center_id' => $this->request->getVar('cost_center_id'),
-        ];
-
-        $department = $this->model->update($id, $data);
+        $department = $this->model->update($id, $this->data());
 
         if ($department) {
             return $this->respondUpdated(format_return($department, UPDATED));
