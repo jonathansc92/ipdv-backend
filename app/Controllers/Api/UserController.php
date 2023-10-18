@@ -13,6 +13,6 @@ class UserController extends BaseController
     public function index()
     {
         $users = new UserModel;
-        return $this->respond(['users' => $key], 200);
+        return $this->respond(['users' => $users], 200);
     }
 }

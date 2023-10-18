@@ -101,6 +101,7 @@ class Autoload extends AutoloadConfig
     public $helpers = [
         'returnal',
         'messages',
-        'pagination'
+        'pagination',
+        'token'
     ];
 }
