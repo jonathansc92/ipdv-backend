@@ -12,7 +12,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "codeigniter4/framework": "^4.0",
-        "codeigniter4/shield": "^1.0@beta"
+        "firebase/php-jwt": "^6.9"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9",
@@ -36,7 +36,5 @@
     },
     "scripts": {
         "test": "phpunit"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

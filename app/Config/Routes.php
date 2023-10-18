@@ -12,7 +12,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->resource('cost-centers', ['controller' => 'CostCenterController']);
     $routes->resource('departments', ['controller' => 'DepartmentController']);
 
-    $routes->group('users', function ($routes) {
-        $routes->get('/', 'UserController::get');
-    });
+    $routes->post('register', 'RegisterController::index');
+    $routes->post('login', 'LoginController::index');
+    // $routes->get('users', 'UserController::index', ['filter' => 'authFilter']);
+    $routes->get('users', 'UserController::index', ['filter' => 'authFilter']);
 });
