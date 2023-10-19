@@ -81,7 +81,7 @@ class CostCenterController extends ResourceController
         $costCenter = $this->model->update($id, $this->data());
 
         if ($costCenter) {
-            return $this->respondUpdated(format_return(UPDATED));
+            return $this->respondUpdated(format_return(UPDATED, $this->model->find($id)));
         }
 
         return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
