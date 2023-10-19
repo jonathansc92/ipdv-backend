@@ -44,4 +44,14 @@ class DepartmentModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function departmentsWithCost()
+    {
+        return $this->select('
+                    departments.id,
+                    departments.description,
+                    departments.cost_center_id,
+                    cost_centers.description AS cost
+                    ')->join('cost_centers', 'cost_centers.id = departments.cost_center_id');
+    }
 }

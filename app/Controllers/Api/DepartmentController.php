@@ -10,6 +10,7 @@ class DepartmentController extends ResourceController
 
     protected $modelName = 'App\Models\DepartmentModel';
     protected $format = 'json';
+
     private function data(): array
     {
         return [
@@ -39,10 +40,10 @@ class DepartmentController extends ResourceController
         $perPage = $this->request->getGet('per_page') ?: PER_PAGE;
         $page = (int) $this->request->getGet('page') ?: PAGE;
 
-        $departments = $this->model->paginate($perPage, 'group1', $page);
+        $departments = $this->model->departmentsWithCost()->paginate($perPage, 'group1', $page);
 
         if ($this->request->getGet('cost_centers')) {
-            $departments = $this->model->where('cost_center_id', $this->request->getGet('cost_centers'))->paginate($perPage);
+            $departments = $this->model->departmentsWithCost()->where('cost_center_id', $this->request->getGet('cost_centers'))->paginate($perPage);
         }
 
         $pagination = getPagination($this->model);
@@ -58,7 +59,7 @@ class DepartmentController extends ResourceController
 
     public function show($id = null)
     {
-        $department = $this->model->find($id);
+        $department = $this->model->departmentsWithCost()->find($id);
 
         if (!$department) {
             return $this->failNotFound(NOT_FOUND);
@@ -76,7 +77,7 @@ class DepartmentController extends ResourceController
         $department = $this->model->insert($this->data(), false);
 
         if ($department) {
-            return $this->respondCreated(format_return(CREATED));
+            return $this->respondCreated(format_return(CREATED, $this->model->departmentsWithCost()->find($id)));
         }
 
         return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
@@ -91,7 +92,7 @@ class DepartmentController extends ResourceController
         $department = $this->model->update($id, $this->data());
 
         if ($department) {
-            return $this->respondUpdated(format_return(UPDATED));
+            return $this->respondUpdated(format_return(UPDATED, $this->model->departmentsWithCost()->find($id)));
         }
 
         return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
