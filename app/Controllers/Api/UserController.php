@@ -24,10 +24,10 @@ class UserController extends BaseController
         $pagination = getPagination($model);
 
         if ($users) {
-            $data = format_return(true, SUCCESS, $users, $pagination);
+            $data = format_return(SUCCESS, $users, $pagination);
             $statusCode = Response::HTTP_OK;
         } else {
-            $data = format_return(false, NOT_FOUND, $users);
+            $data = format_return(NOT_FOUND, $users);
             $statusCode = Response::HTTP_NOT_FOUND;
         }
 

@@ -5,8 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
-    $routes->resource('cost-centers', ['controller' => 'CostCenterController', 'filter' => 'authFilter']);
+$routes->group('api', ['namespace' => 'App\Controllers\Api', 'filter' => 'cors'], function ($routes) {
+    $routes->resource('cost-centers', ['controller' => 'CostCenterController']);
     $routes->resource('departments', ['controller' => 'DepartmentController', 'filter' => 'authFilter']);
     $routes->resource('users', ['controller' => 'UserController'], ['filter' => 'authFilter']);
 

@@ -38,16 +38,16 @@ class LoginController extends BaseController
         $user = $userModel->where('email', $this->request->getVar('email'))->first();
 
         if (is_null($user)) {
-            return $this->respond(format_return(false, UNAUTHORIZED), Response::HTTP_UNAUTHORIZED);
+            return $this->respond(format_return(UNAUTHORIZED), Response::HTTP_UNAUTHORIZED);
         }
 
         $pwd_verify = password_verify($this->request->getVar('password'), $user['password']);
 
         if (!$pwd_verify) {
-            return $this->respond(format_return(false, UNAUTHORIZED), Response::HTTP_UNAUTHORIZED);
+            return $this->respond(format_return(UNAUTHORIZED), Response::HTTP_UNAUTHORIZED);
         }
 
-        return $this->respond(format_return(true, LOGIN_SUCCESS, [
+        return $this->respond(format_return(LOGIN_SUCCESS, [
             'token' => getToken($user['email'])
         ]));
     }

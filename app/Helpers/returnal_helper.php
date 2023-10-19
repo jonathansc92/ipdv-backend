@@ -1,9 +1,8 @@
 <?php
 
-function format_return($success = true, string $message = '', $data = null, $pagination = null)
+function format_return(string $message = '', $data = null, $pagination = null)
 {
     $response = [
-        'success' => $success,
         'message' => $message,
     ];
 

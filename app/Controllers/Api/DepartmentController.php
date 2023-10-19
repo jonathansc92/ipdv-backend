@@ -48,9 +48,9 @@ class DepartmentController extends ResourceController
         $pagination = getPagination($this->model);
 
         if ($departments) {
-            $data = format_return(true, SUCCESS, $departments, $pagination);
+            $data = format_return(SUCCESS, $departments, $pagination);
         } else {
-            $data = format_return(false, NOT_FOUND, $departments);
+            $data = format_return(NOT_FOUND, $departments);
         }
 
         return $this->respond($data, Response::HTTP_OK);
@@ -64,7 +64,7 @@ class DepartmentController extends ResourceController
             return $this->failNotFound(NOT_FOUND);
         }
 
-        return $this->respond(format_return(true, SUCCESS, $department));
+        return $this->respond(format_return(SUCCESS, $department));
     }
 
     public function create()
@@ -76,10 +76,10 @@ class DepartmentController extends ResourceController
         $department = $this->model->insert($this->data(), false);
 
         if ($department) {
-            return $this->respondCreated(format_return($department, CREATED));
+            return $this->respondCreated(format_return(CREATED));
         }
 
-        return $this->respond(format_return(false, ERROR), Response::HTTP_FORBIDDEN);
+        return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
     }
 
     public function update($id = null)
@@ -91,16 +91,16 @@ class DepartmentController extends ResourceController
         $department = $this->model->update($id, $this->data());
 
         if ($department) {
-            return $this->respondUpdated(format_return($department, UPDATED));
+            return $this->respondUpdated(format_return(UPDATED));
         }
 
-        return $this->respond(format_return(false, ERROR), Response::HTTP_FORBIDDEN);
+        return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
     }
 
     public function delete($id = null)
     {
         $this->model->delete($id);
 
-        return $this->respondDeleted(format_return(true, DELETED));
+        return $this->respondDeleted(format_return(DELETED));
     }
 }

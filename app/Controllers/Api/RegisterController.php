@@ -49,6 +49,6 @@ class RegisterController extends BaseController
         $model = new UserModel();
         $model->save($this->data());
 
-        return $this->respond(format_return(false, CREATED), Response::HTTP_CREATED);
+        return $this->respond(format_return(CREATED), Response::HTTP_CREATED);
     }
 }
