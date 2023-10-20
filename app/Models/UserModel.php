@@ -47,6 +47,6 @@ class UserModel extends Model
                     users.email,
                     users.department_id,
                     departments.description AS department
-                    ')->join('departments', 'departments.id = users.department_id');
+                    ')->join('departments', 'departments.id = users.department_id', 'left');
     }
 }
