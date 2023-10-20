@@ -7,7 +7,7 @@ use CodeIgniter\API\ResponseTrait;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\Response;
 
-class LoginController extends BaseController
+class AuthController extends BaseController
 {
     use ResponseTrait;
 
@@ -27,7 +27,7 @@ class LoginController extends BaseController
         }
     }
 
-    public function index()
+    public function login()
     {
         if ($this->rules()) {
             return $this->rules();

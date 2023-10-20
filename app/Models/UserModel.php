@@ -38,4 +38,15 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function usersDepartment()
+    {
+        return $this->select('
+                    users.id,
+                    users.name,
+                    users.email,
+                    users.department_id,
+                    departments.description AS department
+                    ')->join('departments', 'departments.id = users.department_id');
+    }
 }

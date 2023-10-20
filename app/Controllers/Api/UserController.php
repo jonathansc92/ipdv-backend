@@ -26,7 +26,6 @@ class UserController extends ResourceController
             'name' => ['rules' => 'required'],
             'email' => ['rules' => 'required|min_length[4]|max_length[255]|valid_email|is_unique[users.email]'],
             'password' => ['rules' => 'required|min_length[8]|max_length[255]'],
-            'confirm_password'  => ['label' => 'confirm password', 'rules' => 'matches[password]']
         ]));
 
         if (!$rules) {
@@ -43,7 +42,7 @@ class UserController extends ResourceController
         $perPage = $this->request->getGet('per_page') ?: PER_PAGE;
         $page = (int) $this->request->getGet('page') ?: PAGE;
 
-        $users = $this->model->paginate($perPage, 'group1', $page);
+        $users = $this->model->usersDepartment()->paginate($perPage, 'group1', $page);
 
         $pagination = getPagination($this->model);
 
@@ -60,7 +59,7 @@ class UserController extends ResourceController
 
     public function show($id = null)
     {
-        $user = $this->model->find($id);
+        $user = $this->model->usersDepartment()->find($id);
 
         if (!$user) {
             return $this->failNotFound(NOT_FOUND);
@@ -78,7 +77,7 @@ class UserController extends ResourceController
         $user = $this->model->insert($this->data(), true);
 
         if ($user) {
-            return $this->respondCreated(format_return(CREATED, $this->model->find($user)));
+            return $this->respondCreated(format_return(CREATED, $this->model->usersDepartment()->find($user)));
         }
 
         return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
@@ -93,7 +92,7 @@ class UserController extends ResourceController
         $user = $this->model->update($id, $this->data());
 
         if ($user) {
-            return $this->respondUpdated(format_return(UPDATED, $this->model->find($id)));
+            return $this->respondUpdated(format_return(UPDATED, $this->model->usersDepartment()->find($id)));
         }
 
         return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
