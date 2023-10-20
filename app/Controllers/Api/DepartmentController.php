@@ -74,10 +74,10 @@ class DepartmentController extends ResourceController
             return $this->rules();
         }
 
-        $department = $this->model->insert($this->data(), false);
+        $department = $this->model->insert($this->data(), true);
 
         if ($department) {
-            return $this->respondCreated(format_return(CREATED, $this->model->departmentsWithCost()->find($id)));
+            return $this->respondCreated(format_return(CREATED, $this->model->departmentsWithCost()->find($department)));
         }
 
         return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);

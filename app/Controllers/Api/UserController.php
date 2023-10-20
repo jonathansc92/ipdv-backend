@@ -2,26 +2,50 @@
 
 namespace App\Controllers\Api;
 
-use App\Controllers\BaseController;
-use CodeIgniter\API\ResponseTrait;
-use App\Models\UserModel;
 use CodeIgniter\HTTP\Response;
+use CodeIgniter\RESTful\ResourceController;
 
-class UserController extends BaseController
+class UserController extends ResourceController
 {
-    use ResponseTrait;
+    protected $modelName = 'App\Models\UserModel';
+    protected $format = 'json';
+
+    private function data(): array
+    {
+        return [
+            'name'    => $this->request->getVar('name'),
+            'department_id'    => $this->request->getVar('department_id'),
+            'email'    => $this->request->getVar('email'),
+            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
+        ];
+    }
+
+    private function rules()
+    {
+        $rules = $this->validate(([
+            'name' => ['rules' => 'required'],
+            'email' => ['rules' => 'required|min_length[4]|max_length[255]|valid_email|is_unique[users.email]'],
+            'password' => ['rules' => 'required|min_length[8]|max_length[255]'],
+            'confirm_password'  => ['label' => 'confirm password', 'rules' => 'matches[password]']
+        ]));
+
+        if (!$rules) {
+            $response = [
+                'message' => $this->validator->getErrors()
+            ];
+
+            return $this->failValidationErrors($response);
+        }
+    }
 
     public function index()
     {
-
         $perPage = $this->request->getGet('per_page') ?: PER_PAGE;
         $page = (int) $this->request->getGet('page') ?: PAGE;
 
-        $model = new UserModel;
+        $users = $this->model->paginate($perPage, 'group1', $page);
 
-        $users = $model->select('id, name, email, created_at')->paginate($perPage, 'group1', $page);
-
-        $pagination = getPagination($model);
+        $pagination = getPagination($this->model);
 
         if ($users) {
             $data = format_return(SUCCESS, $users, $pagination);
@@ -32,5 +56,53 @@ class UserController extends BaseController
         }
 
         return $this->respond($data, $statusCode);
+    }
+
+    public function show($id = null)
+    {
+        $user = $this->model->find($id);
+
+        if (!$user) {
+            return $this->failNotFound(NOT_FOUND);
+        }
+
+        return $this->respond(format_return(SUCCESS, $user));
+    }
+
+    public function create()
+    {
+        if ($this->rules()) {
+            return $this->rules();
+        }
+
+        $user = $this->model->insert($this->data(), true);
+
+        if ($user) {
+            return $this->respondCreated(format_return(CREATED, $this->model->find($user)));
+        }
+
+        return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
+    }
+
+    public function update($id = null)
+    {
+        if ($this->rules()) {
+            return $this->rules();
+        }
+
+        $user = $this->model->update($id, $this->data());
+
+        if ($user) {
+            return $this->respondUpdated(format_return(UPDATED, $this->model->find($id)));
+        }
+
+        return $this->respond(format_return(ERROR), Response::HTTP_FORBIDDEN);
+    }
+
+    public function delete($id = null)
+    {
+        $this->model->delete($id);
+
+        return $this->respondDeleted(format_return(DELETED));
     }
 }
