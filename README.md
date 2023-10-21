@@ -1,62 +1,53 @@
-# CodeIgniter 4 Application Starter
+# Teste
 
-## What is CodeIgniter?
+Este projeto é destinado a pôr em exercício aprendizados e conhecimento técnico simulando um cadastro de centro de custos, departamentos e usuários.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Breifing
+### Objetivo
+O principal objetivo deste projeto é criar um API em Codeigniter, que possibilita.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+- Cadastro de centro de custos;
+- Cadastro de departamentos;
+- Cadastro de usuários.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+# Padrões adotados
+Para criação da API foi adotado alguns padrões e conceitos para melhor legibilidade e manutenção do projeto, como:
+SOLID
+Design Pattern (Controllers, Models, Filters)
 
-The user guide corresponding to the latest version of the framework can be found
-[here](https://codeigniter4.github.io/userguide/).
+# Tecnologias
+- API desenvolvida em Codeigniter 4
+- Banco de Dados em PostgreSQL
 
-## Installation & updates
+# Pacotes
+- [https://github.com/agungsugiarto/codeigniter4-cors](agungsugiarto/codeigniter4-cors)
+- [https://github.com/firebase/php-jwt](https://github.com/firebase/php-jwt)
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## Uso
+Para rodar o projeto é necessário ter o **docker** configurador e um terminal **bash**. Após o clonar o repositório, deve ser acessada a pasta raiz do projeto e rodado o comando: `docker compose up -d` no terminal. Feito isso, só aguardar o projeto rodar e executar todos os scripts necessários. Caso desejar dados nas tabelas de banco de dados pode rodar o seeder com o comando `php artisan db:seed`. Para rodar os testes de integração, acessar o container e executar o comando `php artisan test`.
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+**TESTE DE Suportes balanceados:**
+Suporte Balanceados: **[POST]** `/api/check-balanced/`, payload: `{ "sequence": "{sequence}" }`.
 
-## Setup
+**PERSONS:**
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+Lista de pessoas: **[GET]** `/api/persons`.
 
-## Important Change with index.php
+Mostrar uma pessoa: **[GET]** `/api/persons/1`.
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+Salvar uma pessoa: **[POST]** `/api/persons`, payload: `{ "name": "{name}" }`.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+Alterar uma pessoa: **[PUT]** `/api/persons/1`, payload: `{ "name": "{name}" }`.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+Excluir uma pessoa: **[DELETE]** `/api/persons/1`.
 
-## Repository Management
+**CONTACTS:**
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Salvar um contato: **[POST]** `/api/contacts`, payload: `{ "phone": "{phone}", "whatsapp": "{whatsapp}", "email": "{email}", "person_id": {1} }`.
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+Alterar uma pessoa: **[PUT]** `/api/contacts/1`, , payload: `{ "phone": "{phone}", "whatsapp": "{whatsapp}", "email": "{email}", "person_id": {1} }`.
 
-## Server Requirements
+Excluir uma pessoa: **[DELETE]** `/api/contacts/1`.
 
-PHP version 7.4 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+Por fim, é isso.
+Qualquer dúvida, ou sugestão. Enviar e-mail para: jonathansc92@gmail.com
