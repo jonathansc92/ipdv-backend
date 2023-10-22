@@ -7,20 +7,27 @@ use CodeIgniter\RESTful\ResourceController;
 
 class CostCenterController extends ResourceController
 {
-
     protected $modelName = 'App\Models\CostCenterModel';
     protected $format = 'json';
+
     private function data(): array
     {
-        return [
-            'description' => $this->request->getVar('description'),
-        ];
+        $description = $this->request->getVar('description');
+
+        if (isset($description) && !empty($description)) {
+            $data['description'] = $description;
+        }
+
+        return $data;
     }
 
-    private function rules()
+    private function rules($id = null)
     {
         $rules = $this->validate(([
-            'description' => 'required'
+            'description' => [
+                'label' => 'descrição',
+                'rules' => $id ? 'if_exist' : 'required' . '|max_length[50]'
+            ]
         ]));
 
         if (!$rules) {
@@ -59,8 +66,10 @@ class CostCenterController extends ResourceController
 
     public function create(): Response
     {
-        if ($this->rules()) {
-            return $this->rules();
+        $rules = $this->rules();
+
+        if ($rules) {
+            return $rules;
         }
 
         $costCenter = $this->model->insert($this->data(), true);
@@ -74,8 +83,10 @@ class CostCenterController extends ResourceController
 
     public function update($id = null): Response
     {
-        if ($this->rules()) {
-            return $this->rules();
+        $rules = $this->rules($id);
+
+        if ($rules) {
+            return $rules;
         }
 
         $costCenter = $this->model->update($id, $this->data());

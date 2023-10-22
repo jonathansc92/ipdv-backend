@@ -7,23 +7,36 @@ use CodeIgniter\RESTful\ResourceController;
 
 class DepartmentController extends ResourceController
 {
-
     protected $modelName = 'App\Models\DepartmentModel';
     protected $format = 'json';
 
     private function data(): array
     {
-        return [
-            'description' => $this->request->getVar('description'),
-            'cost_center_id' => $this->request->getVar('cost_center_id'),
-        ];
+        $description = $this->request->getVar('description');
+        $costCenterId = $this->request->getVar('cost_center_id');
+
+        if (isset($description) && !empty($description)) {
+            $data['description'] = $description;
+        }
+
+        if (isset($costCenterId) && !empty($costCenterId)) {
+            $data['cost_center_id'] = $costCenterId;
+        }
+
+        return $data;
     }
 
-    private function rules()
+    private function rules($id = null)
     {
         $rules = $this->validate(([
-            'description' => 'required',
-            'cost_center_id' => 'required',
+            'description' => [
+                'label' => 'descrição',
+                'rules' => $id ? 'if_exist' : 'required' . '|max_length[50]'
+            ],
+            'cost_center_id' => [
+                'label' => 'centro de custo id',
+                'rules' => 'if_exist|integer'
+            ]
         ]));
 
         if (!$rules) {
@@ -70,8 +83,10 @@ class DepartmentController extends ResourceController
 
     public function create()
     {
-        if ($this->rules()) {
-            return $this->rules();
+        $rules = $this->rules();
+
+        if ($rules) {
+            return $rules;
         }
 
         $department = $this->model->insert($this->data(), true);
@@ -85,8 +100,10 @@ class DepartmentController extends ResourceController
 
     public function update($id = null)
     {
-        if ($this->rules()) {
-            return $this->rules();
+        $rules = $this->rules($id);
+
+        if ($rules) {
+            return $rules;
         }
 
         $department = $this->model->update($id, $this->data());

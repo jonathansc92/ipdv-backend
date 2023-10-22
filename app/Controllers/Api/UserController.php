@@ -12,20 +12,49 @@ class UserController extends ResourceController
 
     private function data(): array
     {
-        return [
-            'name'    => $this->request->getVar('name'),
-            'department_id'    => $this->request->getVar('department_id'),
-            'email'    => $this->request->getVar('email'),
-            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
-        ];
+        $name = $this->request->getVar('name');
+        $email = $this->request->getVar('email');
+        $password = $this->request->getVar('password') ? password_hash($this->request->getVar('password'), PASSWORD_DEFAULT) : null;
+        $departmentId = $this->request->getVar('department_id');
+
+        if (isset($name) && !empty($name)) {
+            $data['name'] = $name;
+        }
+        
+        if (isset($email) && !empty($email)) {
+            $data['email'] = $email;
+        }
+
+        if (isset($password) && !empty($password)) {
+            $data['password'] = $password;
+        }
+
+        if (isset($departmentId) && !empty($departmentId)) {
+            $data['department_id'] = $departmentId;
+        }
+
+        return $data;
     }
 
-    private function rules()
+    private function rules($id = null)
     {
         $rules = $this->validate(([
-            'name' => ['rules' => 'required'],
-            'email' => ['rules' => 'required|min_length[4]|max_length[255]|valid_email|is_unique[users.email]'],
-            'password' => ['rules' => 'required|min_length[8]|max_length[255]'],
+            'name' => [
+                'label' => 'nome',
+                'rules' => $id ? 'if_exist' : 'required' . '|max_length[100]'
+            ],
+            'email' => [
+                'label' => 'email',
+                'rules' => $id ? 'if_exist' : 'required' . '|min_length[4]|max_length[255]|valid_email|is_unique[users.email,id,' . $id . ']'
+            ],
+            'password' => [
+                'label' => 'senha',
+                'rules' => $id ? 'if_exist' : 'required' . '|min_length[8]|max_length[255]'
+            ],
+            'department_id' => [
+                'label' => 'departamento id',
+                'rules' => 'if_exist|integer'
+            ]
         ]));
 
         if (!$rules) {
@@ -70,8 +99,10 @@ class UserController extends ResourceController
 
     public function create()
     {
-        if ($this->rules()) {
-            return $this->rules();
+        $rules = $this->rules();
+
+        if ($rules) {
+            return $rules;
         }
 
         $user = $this->model->insert($this->data(), true);
@@ -85,8 +116,10 @@ class UserController extends ResourceController
 
     public function update($id = null)
     {
-        if ($this->rules()) {
-            return $this->rules();
+        $rules = $this->rules($id);
+
+        if ($rules) {
+            return $rules;
         }
 
         $user = $this->model->update($id, $this->data());

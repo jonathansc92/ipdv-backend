@@ -3,28 +3,26 @@
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
-use Carbon\Carbon;
+use Faker\Factory;
 
 class CostCenterSeeder extends Seeder
 {
     public function run()
     {
-        $data = [
-            [
-                'id' => 1,
-                'description' => 'Operacional',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-            [
-                'id' => 2,
-                'description' => 'Administrativo',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-        ];
-
         $this->db->table('cost_centers')->emptyTable();
-        $this->db->table('cost_centers')->insertBatch($data);
+
+        for ($i = 0; $i < 10; $i++) { 
+            $this->db->table('cost_centers')->insert($this->generateUsers());
+        }
+    }
+
+    private function generateUsers(): array
+    {
+        $faker = Factory::create();
+        return [
+            'description' => $faker->catchPhrase(),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
     }
 }

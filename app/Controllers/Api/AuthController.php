@@ -29,8 +29,10 @@ class AuthController extends BaseController
 
     public function login()
     {
-        if ($this->rules()) {
-            return $this->rules();
+        $rules = $this->rules();
+
+        if ($rules) {
+            return $rules;
         }
 
         $userModel = new UserModel();
