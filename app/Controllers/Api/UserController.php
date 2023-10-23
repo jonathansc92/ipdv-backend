@@ -49,7 +49,7 @@ class UserController extends ResourceController
             ],
             'password' => [
                 'label' => 'senha',
-                'rules' => $id ? 'if_exist' : 'required' . '|min_length[8]|max_length[255]'
+                'rules' => $id ? 'if_exist' : 'required' . '|min_length[4]|max_length[255]'
             ],
             'department_id' => [
                 'label' => 'departamento id',
