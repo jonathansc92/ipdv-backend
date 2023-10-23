@@ -14,8 +14,8 @@ class AuthController extends BaseController
     private function rules()
     {
         $rules = $this->validate(([
-            'email' => 'required',
-            'password' => 'required',
+            'email' => 'required|valid_email',
+            'password' => 'required|min_length[4]|max_length[255]',
         ]));
 
         if (!$rules) {
