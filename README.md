@@ -24,7 +24,9 @@ Design Pattern (Controllers, Models, Filters)
 - [https://github.com/firebase/php-jwt](https://github.com/firebase/php-jwt)
 
 ## Uso
-Para rodar o projeto é necessário ter o **docker** configurador e um terminal **bash**. Após o clonar o repositório, deve ser acessada a pasta raiz do projeto e rodado o comando: `docker compose up -d` no terminal. Feito isso, só aguardar o projeto rodar e executar todos os scripts necessários. Caso desejar dados nas tabelas de banco de dados pode rodar o seeder com o comando `php artisan db:seed`. Para rodar os testes de integração, acessar o container e executar o comando `php artisan test`.
+- Copiar o arquivo .env.example, colar e renomear para apenas .env;
+- Para rodar o projeto é necessário ter o **docker** configurador e um terminal **bash**. Após o clonar o repositório, deve ser acessada a pasta raiz do projeto e rodado o comando: `docker compose up -d` no terminal.
+
 
 **Centro de Custos:**
 
@@ -65,6 +67,9 @@ Excluir um usuário: **[DELETE]** `/api/users/{id}`
 **Login:**
 
 Login: **[POST]** `/api/auth/login`, payload: `{ "email": "jonathan@teste.com", "password": "teste122" }`
+
+**Collections:**
+- Collections estão na raiz do projeto com o nome IPDV.postman_collection.json.
 
 ## Autor
 - Autor - Jonathan Cruz
