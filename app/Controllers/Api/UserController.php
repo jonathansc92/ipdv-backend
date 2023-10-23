@@ -73,13 +73,11 @@ class UserController extends ResourceController
 
         if ($users) {
             $data = format_return(SUCCESS, $users, $pagination);
-            $statusCode = Response::HTTP_OK;
         } else {
             $data = format_return(NOT_FOUND, $users);
-            $statusCode = Response::HTTP_NOT_FOUND;
         }
 
-        return $this->respond($data, $statusCode);
+        return $this->respond($data);
     }
 
     public function show($id = null)
